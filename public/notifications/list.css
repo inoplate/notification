@@ -1,0 +1,15 @@
+.notifications-container ul.notifications-wrapper {
+  list-style: none;
+  padding-left: 0;
+}
+.notifications-container ul.notifications-wrapper li {
+  padding: 10px 0;
+  background: transparent;
+  border-bottom: 1px solid #cbd6e3;
+}
+.notifications-container ul.notifications-wrapper li .datetime {
+  color: #a9bbd2;
+  font-size: 12px;
+}
+
+/*# sourceMappingURL=list.css.map */

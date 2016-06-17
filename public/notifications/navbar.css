@@ -1,0 +1,16 @@
+.notifications-menu ul.notifications-wrapper {
+  list-style: none;
+  padding: 0;
+}
+.notifications-menu ul.notifications-wrapper li {
+  background: transparent;
+  border-bottom: 1px solid #f4f4f4;
+}
+.notifications-menu ul.notifications-wrapper li .message {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 10px;
+}
+
+/*# sourceMappingURL=navbar.css.map */

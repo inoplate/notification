@@ -1,0 +1,4 @@
+suites:
+  library_suite:
+    namespace: Inoplate\Notification\Tests
+    psr4_prefix: Inoplate\Notification\Tests

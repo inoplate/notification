@@ -1,0 +1,16 @@
+{
+    "name": "inoplate/notification",
+    "autoload": {
+        "psr-4": {
+            "Inoplate\\Notification\\": "src/"
+        }
+    },
+    "require": {
+        "ramsey/uuid": "^3.1",
+        "inoplate/notifier" : "dev-master",
+        "inoplate/velatchet" : "dev-master"
+    },
+    "require-dev": {
+        "phpspec/phpspec": "~2.0"
+    }
+}

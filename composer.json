@@ -7,10 +7,18 @@
     },
     "require": {
         "ramsey/uuid": "^3.1",
-        "inoplate/notifier" : "dev-master",
-        "inoplate/velatchet" : "dev-master"
+        "inoplate/notifier" : "0.1.*",
+        "inoplate/velatchet" : "0.1.*"
     },
     "require-dev": {
         "phpspec/phpspec": "~2.0"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
+    },
+    "config": {
+        "preferred-install": "dist"
     }
 }

@@ -12,9 +12,11 @@ class NotificationServiceProvider extends ServiceProvider
      * @var array
      */
     protected $providers = [
-        'Inoplate\Velatchet\VelatchetServiceProvider',
-        'Inoplate\Notification\Providers\RouteServiceProvider',
-        'Inoplate\Notification\Providers\EventServiceProvider',
+        \Inoplate\Velatchet\VelatchetServiceProvider::class,
+        \Inoplate\Notifier\Laravel\NotifierServiceProvider::class,
+        \Inoplate\Notification\Providers\RouteServiceProvider::class,
+        \Inoplate\Notification\Providers\CommandServiceProvider::class,
+        \Inoplate\Notification\Providers\EventServiceProvider::class,
     ];
 
     /**
@@ -36,6 +38,11 @@ class NotificationServiceProvider extends ServiceProvider
 
         $events = $this->app['Inoplate\Foundation\App\Services\Events\Dispatcher'];
         Notification::Observe(new ModelObservers\NotificationObserver($events));
+
+        view()->composer(
+            'inoplate-notification::notifications.navbar',
+            'Inoplate\Notification\Http\ViewComposers\NotificationViewComposer'
+        );
     }
 
     /**
@@ -46,7 +53,6 @@ class NotificationServiceProvider extends ServiceProvider
     public function register()
     {
         parent::register();
-
         $this->app->bind('Inoplate\Notifier\NotifRepository', 
             'Inoplate\Notification\Infrastructure\Repositories\Notification');
     }

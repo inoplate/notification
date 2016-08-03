@@ -3,7 +3,7 @@
         list-style: none;
         padding: 0;
 
-        li {
+        li:not(.loader) {
             background: transparent;
             border-bottom: 1px solid #f4f4f4;
 
@@ -13,6 +13,10 @@
                 white-space: nowrap;
                 padding: 10px;
             }
+        }
+
+        li.loader {
+            background-size: 20px 20px;
         }
     }
 }

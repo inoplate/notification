@@ -2,15 +2,18 @@
   list-style: none;
   padding: 0;
 }
-.notifications-menu ul.notifications-wrapper li {
+.notifications-menu ul.notifications-wrapper li:not(.loader) {
   background: transparent;
   border-bottom: 1px solid #f4f4f4;
 }
-.notifications-menu ul.notifications-wrapper li .message {
+.notifications-menu ul.notifications-wrapper li:not(.loader) .message {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   padding: 10px;
+}
+.notifications-menu ul.notifications-wrapper li.loader {
+  background-size: 20px 20px;
 }
 
 /*# sourceMappingURL=navbar.css.map */

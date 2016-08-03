@@ -22,6 +22,6 @@
 ])
 
 @addJs([
-    'http://autobahn.s3.amazonaws.com/js/autobahn.min.js',
+    'vendor/inoplate-notification/vendor/autobahn.min.js',
     'vendor/inoplate-notification/notifications/index.js'
 ])

@@ -3,26 +3,11 @@ list = $ '.notifications-container'
 
 list.notificationList 'checkPagination'
 
-list.on 'notifications.notification.list.loaded', () ->
-    $ul = $ 'ul', this
-    $ 'li', $ul
-        .each () ->
-            id = $ this
-                    .data 'id'
+token = $ 'meta[name="csrf-token"]'
+            .attr 'content'
 
-            viewed = $ this
-                        .data 'viewed'
+data = 
+    _token: token
+    _method: 'put'
 
-            if viewed == 0
-                markAsViewed id
-            
-
-markAsViewed = (id) ->
-    token = $ 'meta[name="csrf-token"]'
-                .attr 'content'
-    data = 
-        _token : token
-        _method : "PUT"
-
-    $.post "/admin/inoplate-notification/notifications/#{id}/mark-as-viewed", data, (result) ->
-        console.log result
+$.post('/admin/inoplate-notification/notifications/mark-as-viewed', data);

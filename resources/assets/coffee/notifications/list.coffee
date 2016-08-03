@@ -26,6 +26,7 @@ class NotificationList
         return @$markup
 
     checkPagination: () ->
+        console.log(@$nextLoader.is(':within-viewport'));
         if @$nextLoader.is(':within-viewport') && !@$nextLoader.data('loading')
             url = $ 'a', @$nextLoader
                     .prop 'href'
@@ -36,9 +37,6 @@ class NotificationList
         console.info 'connected';
         session.subscribe 'notification', (topic, data) =>
             @$wrapper.prepend this.__buildMarkup data.notification
-
-        session.subscribe 'notification.count', (topic, data) =>
-            console.log data
 
     __onWsClosed: () ->
         console.warn 'WebSocket connection closed'

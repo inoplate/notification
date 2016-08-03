@@ -6,6 +6,8 @@ use Inoplate\Notifier\NotifRepository;
 use Inoplate\Foundation\Http\Controllers\Controller;
 use Inoplate\Foundation\App\Services\Events\Dispatcher as Events;
 use Inoplate\Notification\Events\Notification\NotificationViewed;
+use Inoplate\Foundation\App\Services\Bus\Dispatcher as Bus;
+use Inoplate\Notification\Jobs\MarkNotificationAsViewed;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 
@@ -21,7 +23,7 @@ class NotificationController extends Controller
         $this->events = $events;
     }
 
-    public function getIndex(Request $request)
+    public function getIndex(Request $request, Bus $bus)
     {
         $userId = $request->user()->id;
         $page = $request->input('page') ?: 1;
@@ -34,21 +36,18 @@ class NotificationController extends Controller
         $paginator->setPath('/admin/inoplate-notification/notifications');
 
         $items = $paginator->items();
-        $unviewed = array_filter($items, function($item){
-            return $item['viewed'] == 0;
-        });
-
-        // $this->markAsViewed($unviewed);
 
         return $this->getResponse('inoplate-notification::notifications.index', ['notifications' => $paginator->toArray()]);
     }
 
-    public function putMarkAsViewed(Request $request, $notification)
+    public function putMarkAsViewed(Request $request, Bus $bus)
     {
-        if($notification['viewed'] == 0) {
-            $notification['viewed'] = 1;
-            $this->notifRepository->update($notification['id'], $notification->toArray());
-            $this->events->fire(new NotificationViewed($this->notifRepository, $notification['user_id']));
-        }
+        $userId = $request->user()->id;
+        $this->markAsViewed($bus, $userId);        
+    }
+
+    protected function markAsViewed(Bus $bus, $userId)
+    {
+        $bus->dispatch( new MarkNotificationAsViewed($userId));
     }
 }

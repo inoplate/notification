@@ -7,7 +7,6 @@
       var websocketUrl;
       this.$element = $element;
       this.__onWsConnected = bind(this.__onWsConnected, this);
-      console.log(options);
       this.$markup = options.markup || this.__getDefaultMarkup();
       this.payloads = options.payloads || {};
       this.endInfo = options.endInfo || '.end-info';
@@ -52,15 +51,33 @@
     };
 
     NotificationNavbar.prototype.__onWsConnected = function(session) {
-      console.info('connected');
+      console.info('WebSocket connection connected');
       session.subscribe('notification', (function(_this) {
         return function(topic, data) {
-          return _this.$wrapper.prepend(_this.__buildMarkup(data.notification));
+          var current, notification;
+          notification = data.notification;
+          _this.$wrapper.prepend(_this.__buildMarkup(notification));
+          $.notify({
+            message: notification.message,
+            url: '/admin/inoplate-notification/notifications',
+            target: '_blank'
+          }, {
+            type: 'info',
+            placement: {
+              from: 'bottom',
+              align: 'left'
+            }
+          });
+          current = $('.notif-count').text();
+          current = current || 0;
+          return $('.notif-count').text(parseInt(current) + 1);
         };
       })(this));
       return session.subscribe('notification.count', (function(_this) {
         return function(topic, data) {
-          return console.log(data);
+          var count;
+          count = data.count > 0 ? data.count : '';
+          return $('.notif-count').text(count);
         };
       })(this));
     };
@@ -182,7 +199,23 @@
     height: "200px"
   });
 
-  navbar.notificationNavbar('checkPagination');
+  navbar.on('click', function() {
+    var $this, count, data, token;
+    $this = $(this);
+    count = $('.notif-count', this).text();
+    count = count || 0;
+    if (!$this.hasClass('open')) {
+      navbar.notificationNavbar('checkPagination');
+      if (parseInt(count) > 0) {
+        token = $('meta[name="csrf-token"]').attr('content');
+        data = {
+          _token: token,
+          _method: 'put'
+        };
+        return $.post('/admin/inoplate-notification/notifications/mark-as-viewed', data);
+      }
+    }
+  });
 
 }).call(this);
 

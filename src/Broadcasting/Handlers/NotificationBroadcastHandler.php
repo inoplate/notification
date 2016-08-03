@@ -6,13 +6,29 @@ use Illuminate\Contracts\Auth\Guard;
 
 class NotificationBroadcastHandler
 {
+    /**
+     * @var Illuminate\Contracts\Auth\Guard
+     */
     protected $auth;
 
+    /**
+     * Create new NotificationBroadcastHandler instance
+     * @param Guard $auth
+     */
     public function __construct(Guard $auth)
     {
         $this->auth = $auth;
     }
 
+    /**
+     * Handle notification broadcasting
+     * 
+     * @param  string $topic
+     * @param  array  $clients
+     * @param  array  $payloads
+     * 
+     * @return void
+     */
     public function handleNotification($topic, $clients, $payloads)
     {
         $blaclisted = [];
@@ -36,13 +52,22 @@ class NotificationBroadcastHandler
         $topic->broadcast(compact('notification'), $blaclisted, $whitelisted);
     }
 
+    /**
+     * Handle notification broadcasting
+     * 
+     * @param  string $topic
+     * @param  array  $clients
+     * @param  array  $payloads
+     * 
+     * @return void
+     */
     public function handleNotificationCount($topic, $clients, $payloads)
     {
         $blaclisted = [];
         $whitelisted = [];
 
         $owner = $payloads['owner'];
-        $count = $payloads['totalUnviewed'];
+        $count = $payloads['total'];
 
         foreach ($clients as $client) {
             $client->session->start();

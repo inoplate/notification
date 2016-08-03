@@ -1,4 +1,4 @@
-<div class="notifications-container" data-websocket="ws://inoplate.dev:{{ config('inoplate.velatchet.zmq.port') }}">
+<div class="notifications-container" data-websocket="{{ config('inoplate.notification.ws_domain') }}:{{ config('inoplate.velatchet.zmq.port') }}">
     <ul class="notifications-wrapper"></ul>
     <div class="loader">
         <a href="{{ route('notification.admin.notifications.index.get') }}"></a>

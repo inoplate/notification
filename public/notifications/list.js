@@ -36,6 +36,7 @@
 
     NotificationList.prototype.checkPagination = function() {
       var url;
+      console.log(this.$nextLoader.is(':within-viewport'));
       if (this.$nextLoader.is(':within-viewport') && !this.$nextLoader.data('loading')) {
         url = $('a', this.$nextLoader).prop('href');
         return this.__loadMore(url);
@@ -44,14 +45,9 @@
 
     NotificationList.prototype.__onWsConnected = function(session) {
       console.info('connected');
-      session.subscribe('notification', (function(_this) {
+      return session.subscribe('notification', (function(_this) {
         return function(topic, data) {
           return _this.$wrapper.prepend(_this.__buildMarkup(data.notification));
-        };
-      })(this));
-      return session.subscribe('notification.count', (function(_this) {
-        return function(topic, data) {
-          return console.log(data);
         };
       })(this));
     };

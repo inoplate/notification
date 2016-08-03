@@ -1,6 +1,5 @@
 class NotificationNavbar
     constructor: (@$element, options) ->
-        console.log options
         @$markup = options.markup || @__getDefaultMarkup()
         @payloads = options.payloads || {}
         @endInfo = options.endInfo || '.end-info'
@@ -42,12 +41,34 @@ class NotificationNavbar
             @__loadMore url
 
     __onWsConnected: (session) =>
-        console.info 'connected';
+        console.info 'WebSocket connection connected';
         session.subscribe 'notification', (topic, data) =>
-            @$wrapper.prepend this.__buildMarkup data.notification
+            notification = data.notification
+
+            @$wrapper.prepend this.__buildMarkup notification
+            $.notify
+                message: notification.message
+                url: '/admin/inoplate-notification/notifications'
+                target: '_blank'
+            ,
+                type: 'info'
+                placement:
+                    from: 'bottom'
+                    align: 'left'
+
+            current  = $ '.notif-count'
+                            .text()
+
+            current = current || 0
+
+            $ '.notif-count'
+                .text parseInt(current) + 1
 
         session.subscribe 'notification.count', (topic, data) =>
-            console.log data
+            count = if data.count > 0 then data.count else ''
+
+            $ '.notif-count'
+                .text count
 
     __onWsClosed: () ->
         console.warn 'WebSocket connection closed'
@@ -162,4 +183,23 @@ navbar = $ '.notifications-menu'
                 wrapper: "ul.notifications-wrapper"
                 height: "200px"
 
-navbar.notificationNavbar 'checkPagination'
+navbar.on 'click', () ->
+    $this = $ this
+    count = $ '.notif-count', this
+                .text()
+
+    count = count || 0
+
+    if !$this.hasClass('open')
+        navbar.notificationNavbar 'checkPagination'
+
+        if parseInt(count) > 0
+
+            token = $ 'meta[name="csrf-token"]'
+                .attr 'content'
+
+            data = 
+                _token: token
+                _method: 'put'
+
+            $.post('/admin/inoplate-notification/notifications/mark-as-viewed', data);

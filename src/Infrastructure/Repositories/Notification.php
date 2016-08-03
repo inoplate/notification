@@ -58,7 +58,19 @@ class Notification implements NotifRepository
     }
 
     /**
+     * Set notification as viewed
+     * 
+     * @param mixed $userId
+     */
+    public function setNotificationAsViewed($userId)
+    {
+        $this->model->where('user_id', $userId)
+                    ->update(['viewed' => 1]);
+    }
+
+    /**
      * Count unviewed notifications by user id
+     * 
      * @param  mixed $userId
      * @return int
      */

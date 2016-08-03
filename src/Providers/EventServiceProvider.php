@@ -12,5 +12,9 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     
-    protected $listen = [];
+    protected $listen = [
+        'Inoplate\Notification\Events\Notification\NotificationWasMarkedAsUnviewed' => [
+            'Inoplate\Notification\Listeners\BroadcastNotificationRecounted'
+        ]
+    ];
 }
